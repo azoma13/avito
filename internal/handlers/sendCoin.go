@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/azoma13/avito/internal/dataBase"
@@ -23,17 +22,16 @@ func SendCoinHandler(w http.ResponseWriter, r *http.Request) {
 	err = json.NewDecoder(r.Body).Decode(&sendCoin)
 	if err != nil {
 
-		responseJSON(w, http.StatusBadRequest, models.ErrorResponse{
+		responseJSON(w, http.StatusInternalServerError, models.ErrorResponse{
 			Errors: "json deserialization error: " + err.Error(),
 		})
 
 		return
 	}
 
-	log.Println(sendCoin)
 	employeeToUser, err := dataBase.GetEmployeeDB(sendCoin.ToUser)
 	if err != nil {
-		responseJSON(w, http.StatusUnauthorized, models.ErrorResponse{
+		responseJSON(w, http.StatusBadRequest, models.ErrorResponse{
 			Errors: "error to fetch toUser",
 		})
 		return
@@ -48,7 +46,7 @@ func SendCoinHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if employee.ID == employeeToUser.ID {
-		responseJSON(w, http.StatusUnauthorized, models.ErrorResponse{
+		responseJSON(w, http.StatusBadRequest, models.ErrorResponse{
 			Errors: "error selection to user",
 		})
 		return
@@ -68,7 +66,5 @@ func SendCoinHandler(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-
-	responseJSON(w, http.StatusOK, nil)
 
 }

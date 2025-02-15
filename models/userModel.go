@@ -1,11 +1,10 @@
 package models
 
 type Employee struct {
-	ID        int    `json:"id"`
-	Username  string `json:"username" validate:"required"`
-	Password  string `json:"password"`
-	Balance   int    `json:"balance"`
-	Inventory []Item `json:"inventory"`
+	ID       int    `json:"id"`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password"`
+	Balance  int    `json:"balance"`
 }
 
 type Merch struct {
@@ -44,12 +43,16 @@ type Item struct {
 }
 
 type CoinHistory struct {
-	Received []Transaction `json:"received"`
-	Sent     []Transaction `json:"sent"`
+	Received []Received `json:"received"`
+	Sent     []Sent     `json:"sent"`
 }
 
-type Transaction struct {
+type Received struct {
 	FromUser string `json:"fromUser"`
-	ToUser   string `json:"toUser"`
 	Amount   int    `json:"amount"`
+}
+
+type Sent struct {
+	ToUser string `json:"toUser"`
+	Amount int    `json:"amount"`
 }

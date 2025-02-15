@@ -57,5 +57,4 @@ func BuyItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseJSON(w, http.StatusOK, nil)
 }

@@ -32,9 +32,9 @@ func SendCoinDB(employee models.Employee, employeeToUser models.Employee, sendCo
 	}
 
 	exec = `INSERT INTO transaction
-			(fromUser_id, toUser_id, amount) 
+			(fromUser, toUser, amount) 
 			VALUES ($1, $2, $3);`
-	_, err = DB.Exec(context.Background(), exec, employee.ID, employeeToUser.ID, sendCoin.Amount)
+	_, err = DB.Exec(context.Background(), exec, employee.Username, employeeToUser.Username, sendCoin.Amount)
 	if err != nil {
 		return fmt.Errorf("error exec insert transaction: %w", err)
 	}

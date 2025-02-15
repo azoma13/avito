@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/azoma13/avito/internal/dataBase"
@@ -24,12 +23,11 @@ func AuthEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	log.Println("USERNAME:" + reqEmployee.Username)
 
 	validate := validator.New()
 	err = validate.Struct(reqEmployee)
 	if err != nil {
-		// Validation errors occurred
+
 		responseJSON(w, http.StatusInternalServerError, models.ErrorResponse{
 			Errors: "failed validation during registration employee: " + err.Error(),
 		})
@@ -38,7 +36,6 @@ func AuthEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	employee, err := dataBase.GetEmployeeDB(reqEmployee.Username)
-	log.Println(err)
 	if err != nil {
 
 		err := utils.RegisterEmployee(reqEmployee.Username, reqEmployee.Password)
@@ -60,7 +57,6 @@ func AuthEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	log.Println(employee.Password, reqEmployee.Password)
 
 	err = bcrypt.CompareHashAndPassword([]byte(employee.Password), []byte(reqEmployee.Password))
 	if err != nil {
@@ -82,7 +78,7 @@ func AuthEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.Header.Set("Authorization", "Bearer "+token)
-	log.Println(r)
+
 	responseJSON(w, http.StatusOK, models.AuthResponse{
 		Token: token,
 	})

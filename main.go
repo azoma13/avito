@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"os"
@@ -15,7 +14,7 @@ import (
 func main() {
 
 	conn := dataBase.ConnectToDB()
-	defer conn.Close(context.Background())
+	defer conn.Close()
 
 	port := os.Getenv("PORT")
 
@@ -27,7 +26,7 @@ func main() {
 	r.HandleFunc("/api/auth", handlers.AuthEmployeeHandler).Methods(http.MethodPost)
 	r.HandleFunc("/api/buy/{item}", handlers.BuyItemHandler).Methods(http.MethodGet)
 	r.HandleFunc("/api/sendCoin", handlers.SendCoinHandler).Methods(http.MethodPost)
-	// http.HandleFunc("/api/auth", handlers.Authorization)
+	r.HandleFunc("/api/info", handlers.InfoEmployeeHandler).Methods(http.MethodPost)
 
 	log.Println("application running on port" + port)
 	err := http.ListenAndServe(port, r)

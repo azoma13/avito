@@ -3,9 +3,10 @@ package dataBase
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/azoma13/avito/models"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 )
 
@@ -14,43 +15,26 @@ type DataBase interface {
 	CreateTable() error
 }
 
-var DB *pgx.Conn
+var DB *pgxpool.Pool
 
-func ConnectToDB() *pgx.Conn {
-	var err error
-	DB, err = pgx.Connect(context.Background(), "postgres://postgres:08082018@localhost:5432/avitoDB")
+func ConnectToDB() *pgxpool.Pool {
+	config, err := pgxpool.ParseConfig("postgres://postgres:postgres@db:5432/avitoDB")
 	if err != nil {
-		log.Fatal("Unable to create connection dataBase: %w", err)
+		log.Fatalf("Unable to parse database config: %v", err)
+	}
+
+	DB, err = pgxpool.NewWithConfig(context.Background(), config)
+	if err != nil {
+		log.Fatalf("Unable to create connection pool: %v", err)
+	}
+	time.Sleep(5 * time.Second)
+
+	err = DB.Ping(context.Background())
+	if err != nil {
+		log.Fatalf("Unable to ping database: %v", err)
 	}
 
 	createTableDB()
 	createShopMerchDB()
 	return DB
 }
-
-// func (s *PostgresDB) CreateEmployee(*models.Employee) error {
-// 	return s.CreateEmployeeTable()
-// }
-
-// func (s *PostgresDB) CreateEmployeeTable() error {
-// 	query := `create table if not exists employee (
-// 		id serial primary key,
-// 		email varchar(50)
-// 		)`
-// 	_, err := s.db.Exec(query)
-// 	return err
-// }
-
-// func ConnectToDB() *pgx.Conn {
-
-// 	var err error
-// 	connStr := "postgresql://postgres:08082018@localhost:5432/avito_db"
-
-// 	DB, err = pgx.Connect(context.Background(), connStr)
-// 	DB, err := gorm.Open(pgx., &gorm.Config{})
-// 	if err != nil {
-// 		log.Fatalf("Unable to create connection pool: %v\n", err)
-// 	}
-
-// 	return DB
-// }

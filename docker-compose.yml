@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: avito-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: avitoDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - avito-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: avito-api
+    environment:
+      PORT: "8080"
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: postgres
+      DB_PASSWORD: 'postgres'
+      DB_NAME: avitoDB
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - avito-network
+
+volumes:
+  postgres_data:
+
+networks:
+  avito-network:

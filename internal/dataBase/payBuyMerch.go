@@ -3,7 +3,6 @@ package dataBase
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/azoma13/avito/models"
 )
@@ -51,7 +50,6 @@ func PayBuyMerchDB(employee models.Employee, merch models.Merch) error {
 		}
 
 	}
-	log.Println(employee.ID, merch)
 
 	err = tx.Commit(context.Background())
 	if err != nil {

@@ -31,11 +31,11 @@ func createTableDB() error {
 		CREATE TABLE IF NOT EXISTS transaction
 		(
 			id SERIAL PRIMARY KEY,
-			fromUser_id INT,
-			toUser_id INT,
+			fromUser TEXT,
+			toUser TEXT,
 			amount INT DEFAULT 0,
-			FOREIGN KEY (fromUser_id) REFERENCES employee(id),
-			FOREIGN KEY (toUser_id) REFERENCES employee(id)
+			FOREIGN KEY (fromUser) REFERENCES employee(username),
+			FOREIGN KEY (toUser) REFERENCES employee(username)
 		);`
 	_, err := DB.Exec(context.Background(), query)
 	if err != nil {
