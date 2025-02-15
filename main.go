@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/azoma13/avito/configs"
 	"github.com/azoma13/avito/internal/dataBase"
@@ -12,16 +11,15 @@ import (
 )
 
 func main() {
+	err := configs.Environment()
+	if err != nil {
+		log.Fatalf("Error environment func: %v", err)
+	}
 
 	conn := dataBase.ConnectToDB()
 	defer conn.Close()
 
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = configs.DefaultPort
-	}
-	port = ":" + port
+	port := ":" + configs.PortAPI
 	r := mux.NewRouter()
 	r.HandleFunc("/api/auth", handlers.AuthEmployeeHandler).Methods(http.MethodPost)
 	r.HandleFunc("/api/buy/{item}", handlers.BuyItemHandler).Methods(http.MethodGet)
@@ -29,7 +27,7 @@ func main() {
 	r.HandleFunc("/api/info", handlers.InfoEmployeeHandler).Methods(http.MethodPost)
 
 	log.Println("application running on port" + port)
-	err := http.ListenAndServe(port, r)
+	err = http.ListenAndServe(port, r)
 	if err != nil {
 		panic(err)
 	}

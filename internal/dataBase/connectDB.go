@@ -2,9 +2,11 @@ package dataBase
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
+	"github.com/azoma13/avito/configs"
 	"github.com/azoma13/avito/models"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
@@ -18,7 +20,7 @@ type DataBase interface {
 var DB *pgxpool.Pool
 
 func ConnectToDB() *pgxpool.Pool {
-	config, err := pgxpool.ParseConfig("postgres://postgres:postgres@db:5432/avitoDB")
+	config, err := pgxpool.ParseConfig(fmt.Sprintf("postgres://%s:%s@%s:%s/%s", configs.UsernamePG, configs.PasswordPG, configs.HostPG, configs.PortDG, configs.DataBasePG))
 	if err != nil {
 		log.Fatalf("Unable to parse database config: %v", err)
 	}
