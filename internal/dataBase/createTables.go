@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func createTableDB() error {
+func CreateTableDB() error {
 	query := `CREATE TABLE IF NOT EXISTS employee 
 		(
 			id SERIAL PRIMARY KEY,
@@ -44,7 +44,7 @@ func createTableDB() error {
 	return err
 }
 
-func createShopMerchDB() {
+func CreateShopMerchDB() {
 	itemsMerch := map[string]int{
 		"t-shirt":    80,
 		"cup":        20,

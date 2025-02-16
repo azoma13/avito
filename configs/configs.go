@@ -12,7 +12,7 @@ var (
 	PasswordPG string
 	DataBasePG string
 	HostPG     string
-	PortDG     string
+	PortPG     string
 	PortAPI    string
 	JwtKey     []byte
 )
@@ -27,7 +27,7 @@ func Environment() error {
 	PasswordPG = os.Getenv("PG_PASSWORD")
 	DataBasePG = os.Getenv("PG_DATABASE")
 	HostPG = os.Getenv("PG_HOST")
-	PortDG = os.Getenv("DB_PORTE")
+	PortPG = os.Getenv("PG_PORT")
 	PortAPI = os.Getenv("API_PORT")
 	JwtKey = []byte(os.Getenv("SECRET_KEY"))
 
