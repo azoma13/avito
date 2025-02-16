@@ -21,7 +21,7 @@ services:
     environment:
       PORT: ${API_PORT}
       DB_HOST: ${PG_HOST}
-      DB_PORT: ${DG_PORT}
+      DB_PORT: ${PG_PORT}
       DB_USER: ${PG_USERNAME}
       DB_PASSWORD: ${PG_PASSWORD}
       DB_NAME: ${PG_DATABASE}
